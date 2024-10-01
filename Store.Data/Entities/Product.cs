@@ -8,7 +8,6 @@ namespace Store.Data.Entities
 {
     public class Product : BaseEntity<int>
     {
-        public Product() { }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }

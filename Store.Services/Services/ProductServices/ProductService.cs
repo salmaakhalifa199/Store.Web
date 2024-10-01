@@ -79,18 +79,18 @@ namespace Store.Services.Services.ProductServices
         public async Task<ProductDetailsDto> GetProductByIdAsync(int? productId)
         {
             if(productId is null )
-                throw new Exception("Id is Null");
+                throw new ArgumentNullException(nameof(productId), "Product ID cannot be null");
 
             var specs = new ProductWithSpecification(productId);
 
             var product = await _unitWork.Repository<ProductEntity, int>().GetAllWithSpecificationAsync(specs);
 
 
-            if (product is null)
-                throw new Exception("Product Not Found");
+            if (product is null || !product.Any())
+            { throw new Exception("Product Not Found"); }
 
             var mappedProducts = _mapper.Map<ProductDetailsDto>(product);
-
+            return mappedProducts;
             //var mappedProducts = new ProductDetailsDto
             //{
             //    Id = product.Id,
@@ -101,7 +101,6 @@ namespace Store.Services.Services.ProductServices
             //    BrandName = product.Brand.Name,
             //    TypeName = product.Type.Name
             //};
-            return mappedProducts;
 
         }
     }
