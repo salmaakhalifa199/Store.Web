@@ -5,15 +5,20 @@ using Store.Services.Services.ProductServices.Dtos;
 using Store.Services.Services.ProductServices;
 using Store.Services.HandlerResponses;
 using Store.Services.Services.CacheService;
+using Store.Services.Services.BasketService;
+using Store.Repository.Basket.Interfaces;
+using Store.Repository.Basket;
 
 namespace Store.Web.Extensions
 {
-    public static class ApplicationServerExtension
+    public static class ApplicationServiceExtension
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
             services.AddScoped<IUnitWork, UnitWork>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<ICacheService, CacheService>();
             services.AddAutoMapper(typeof(ProductProfile));
 
