@@ -19,7 +19,7 @@ namespace Store.Web.Controllers
             => Ok(await _basketService.GetBasketAsync(id));
 
         [HttpPost]
-        []
+     
         public async Task<ActionResult<CustomerBasketDto>> UpdateBasketAsync(CustomerBasketDto input)
         => Ok(await _basketService.UpdateBasketAsync(input));
 
