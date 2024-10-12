@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Store.Data.Entities.OrderEntities
         public string BuyerEmail { get; set; }
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
         public ShippingAddress ShippingAddress { get; set; }
+        [ForeignKey("DeliveryMethodId")]
         public DeliveryMethods DeliveryMethods { get; set; }
         public int? DeliveryMethodId { get; set; }
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Placed;
@@ -21,6 +23,7 @@ namespace Store.Data.Entities.OrderEntities
         public decimal SubTotal { get; set; }
         public decimal GetTotal() => SubTotal + DeliveryMethods.Price;
         public string? BasketId { get; set; }
+        public string? PaymentIntentId { get; set; }
 
 
     }

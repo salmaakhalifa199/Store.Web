@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Data", "Store.Data\Store.Data.csproj", "{22798765-E0BC-4DAA-A83F-5CA6264D93B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Data", "Store.Data\Store.Data.csproj", "{22798765-E0BC-4DAA-A83F-5CA6264D93B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Repository", "Store.Repository\Store.Repository.csproj", "{A7EDC267-36B6-4C3A-800C-C7A63B4548CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Repository", "Store.Repository\Store.Repository.csproj", "{A7EDC267-36B6-4C3A-800C-C7A63B4548CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Services", "Store.Services\Store.Services.csproj", "{B553D8F0-FA00-4623-ACBB-542B7A6AC591}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Services", "Store.Services\Store.Services.csproj", "{B553D8F0-FA00-4623-ACBB-542B7A6AC591}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Web", "Store.Web\Store.Web.csproj", "{B5C24582-0601-4F4D-A93D-4C2FBA2B25DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.API", "Store.Web\Store.API.csproj", "{B5C24582-0601-4F4D-A93D-4C2FBA2B25DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
