@@ -7,12 +7,15 @@ using Store.Repository.Interfaces;
 using Store.Repository.Specification.OrderSpecs;
 using Store.Services.Services.BasketService;
 using Store.Services.Services.OrderService.Dtos;
+using Store.Services.Services.PaymentService;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Order = Store.Data.Entities.OrderEntities.Order;
+using Product = Store.Data.Entities.Product;
 
 namespace Store.Services.Services.OrderService
 {
@@ -21,12 +24,14 @@ namespace Store.Services.Services.OrderService
         private readonly IBasketService _basketService;
         private readonly IUnitWork _unitWork;
         private readonly IMapper _mapper;
+        private readonly IPaymentService _paymentService;
 
-        public OrderService(IBasketService basketService , IUnitWork unitWork , IMapper mapper)
+        public OrderService(IBasketService basketService , IUnitWork unitWork , IMapper mapper , IPaymentService paymentService)
         {
             _basketService = basketService;
             _unitWork = unitWork;
             _mapper = mapper;
+            _paymentService = paymentService;
         }
         public async Task<OrderDetailsDto> CreateOrderAsync(OrderDto input)
         {
@@ -84,8 +89,13 @@ namespace Store.Services.Services.OrderService
 
             #region To Do => Payment
 
+            var specs = new OrderWithPaymentIntentSpecification(basket.PaymentIntentId);
 
+            var existingOrder = await _unitWork.Repository<Order, Guid>().GetWithSpecificationByIdAsync(specs);
 
+            if(existingOrder is null)
+                await _paymentService.CreateOrUpdatePaymentIntent(basket);
+           
             #endregion
 
             #region Create Order
@@ -101,15 +111,24 @@ namespace Store.Services.Services.OrderService
                 BuyerEmail = input.BuyerEmail,
                 BasketId = input.BasketId,  
                 OrderItems = mappedOrderItems,
-                SubTotal = subTotal
+                SubTotal = subTotal,
+                PaymentIntentId = basket.PaymentIntentId
             };
 
-            await _unitWork.Repository<Order , Guid>().AddAsync(order);
+           
 
-            await _unitWork.CompleteAsync();
+            try
+            {
+                await _unitWork.Repository<Order , Guid>().AddAsync(order);
+                await _unitWork.CompleteAsync();
+                var mappedOrder = _mapper.Map<OrderDetailsDto>(order);
+                return mappedOrder;
+            } 
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
 
-            var mappedOrder = _mapper.Map<OrderDetailsDto>(order);
-            return mappedOrder;
 
             #endregion
 
@@ -125,7 +144,7 @@ namespace Store.Services.Services.OrderService
 
             var orders = await _unitWork.Repository<Order, Guid>().GetAllWithSpecificationAsync(specs);
 
-            if (!orders.Any())
+            if (orders is {Count : <= 0 })
                 throw new Exception("You do not have any orders yet!");
 
             var mappedOrders = _mapper.Map<List<OrderDetailsDto>>(orders);
@@ -133,9 +152,9 @@ namespace Store.Services.Services.OrderService
             return mappedOrders;
         }
 
-        public async Task<OrderDetailsDto> GetOrderByIdAsync(Guid id)
+        public async Task<OrderDetailsDto> GetOrderByIdAsync(Guid id , string buyerEmail)
         {
-            var specs = new OrderWithItemSpecification(id);
+            var specs = new OrderWithItemSpecification(id , buyerEmail);
 
             var order = await _unitWork.Repository<Order, Guid>().GetWithSpecificationByIdAsync(specs);
 
@@ -146,5 +165,7 @@ namespace Store.Services.Services.OrderService
 
             return mappedOrder;
         }
+
+       
     }
 }

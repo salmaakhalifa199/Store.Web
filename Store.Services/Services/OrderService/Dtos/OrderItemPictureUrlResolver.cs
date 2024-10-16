@@ -20,7 +20,7 @@ namespace Store.Services.Services.OrderService.Dtos
 
         public string Resolve(OrderItem source, OrderItemDto destination, string destMember, ResolutionContext context)
         {
-            if (!string.IsNullOrEmpty(source.ItemOrdered.PictureUrl))
+            if (!string.IsNullOrEmpty(source.ItemOrdered.PictureUrl) || source.ItemOrdered.PictureUrl.Contains(source.ItemOrdered.PictureUrl))
             {
                 return $"{_configuration["BaseUrl"]}{source.ItemOrdered.PictureUrl}";
             }

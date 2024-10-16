@@ -1,10 +1,12 @@
-﻿using Store.Data.Entities.OrderEntities;
+﻿using StackExchange.Redis;
+using Store.Data.Entities.OrderEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Order = Store.Data.Entities.OrderEntities.Order;
 
 namespace Store.Repository.Specification.OrderSpecs
 {
@@ -18,8 +20,8 @@ namespace Store.Repository.Specification.OrderSpecs
             AddOrderByDes(order => order.OrderDate);
         }
 
-        public OrderWithItemSpecification(Guid id)
-            : base(order => order.Id == id)
+        public OrderWithItemSpecification(Guid id , string buyerEmail )
+            : base(order => order.Id == id  && order.BuyerEmail == buyerEmail)
         {
             AddInclude(order => order.OrderItems);
             AddInclude(order => order.DeliveryMethods);

@@ -50,8 +50,10 @@ namespace Store.Services.Services.PaymentService
             {
                 var product = await _unitWork.Repository<Product, int>().GetByIdAsync(item.ProductId);
 
-                if(item.Price != product.Price)
+                if (item.Price != product.Price)
+                {
                     item.Price = product.Price;
+                }
             }
 
             var service = new PaymentIntentService();
